@@ -69,6 +69,7 @@ _we_admin:
     prefix: /$prefix
 fos_user_security:
     resource: "@FOSUserBundle/Resources/config/routing/security.xml"
+    prefix: /$prefix/users
 EOF;
         $fs->dumpFile($routingFile, $routingData);
     
@@ -124,7 +125,7 @@ security:
     # http://symfony.com/doc/current/book/security.html#security-book-access-control-matching-options
     access_control:
         - { path: ^/$prefix/, role: ROLE_ADMIN }
-        - { path: ^/$prefix/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/$prefix/users/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         #- { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
 EOF;
     
