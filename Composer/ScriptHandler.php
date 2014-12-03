@@ -1,7 +1,7 @@
 <?php
 
 namespace WeCMS\DistributionBundle\Composer;
-use Sensio\Bundle\DistributionBundle\Composer as SensioScriptHandler;
+use Sensio\Bundle\DistributionBundle\Composer\ScriptHandler as SensioScriptHandler;
 
 class ScriptHandler extends SensioScriptHandler
 {
