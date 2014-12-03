@@ -140,6 +140,7 @@ fos_user:
         group_class: WeCMS\UserBundle\Entity\Group
 EOF;
         $fs->dumpFile($configFile, $configData);
-        
+        static::executeCommand($event, $consoleDir, 'doctrine:schema:create', $options['process-timeout']);
+        static::executeCommand($event, $consoleDir, 'doctrine:schema:update --force', $options['process-timeout']);
     }
 }
