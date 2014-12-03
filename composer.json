@@ -1,0 +1,34 @@
+{
+    "name": "wepala/wecms-distributionbundle",
+    "description": "Base bundle for WeCMS Distributions",
+    "keywords": ["distribution","configuration"],
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Akeem Philbert",
+            "email": "akeem.philbert@wepala.com"
+        }
+    ],
+
+    "require": {
+        "php": ">=5.3.3",
+        "symfony/framework-bundle": "~2.3",
+        "symfony/class-loader": "~2.2",
+        "symfony/form": "~2.2",
+        "symfony/process": "~2.2",
+        "symfony/validator": "~2.2",
+        "symfony/yaml": "~2.2",
+        "sensiolabs/security-checker": "~2.0"
+    },
+    "autoload": {
+        "psr-0": { "WeCMS\\DistributionBundle": "" }
+    },
+    "target-dir": "WeCMS/DistributionBundle",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    },
+    "minimum-stability": "dev"
+}
