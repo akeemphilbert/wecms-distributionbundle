@@ -1,8 +1,9 @@
 <?php
 
 namespace WeCMS\DistributionBundle\Composer;
+use Sensio\Bundle\DistributionBundle\Composer as SensioScriptHandler;
 
-class ScriptHandler extends Sensio\Bundle\DistributionBundle\Composer\ScriptHandler
+class ScriptHandler extends SensioScriptHandler
 {
     public static function installAdminBundle(CommandEvent $event)
     {
