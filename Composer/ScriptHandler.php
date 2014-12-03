@@ -20,7 +20,7 @@ class ScriptHandler extends SensioScriptHandler
         }
     
         if (!getenv('WECMS_FORCE_ADMIN')) {
-            if (!$event->getIO()->askConfirmation('Would you like to install the Admin bundle? [y/N] ', false)) {
+            if (!$event->getIO()->askConfirmation('Would you like to install the Admin bundle? [Y/n] ', true)) {
                 return;
             }
         }
@@ -33,6 +33,7 @@ class ScriptHandler extends SensioScriptHandler
         $kernelFile = $appDir.'/AppKernel.php';
         $ref = 'new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),';//TODO replace with custom profiler here
         $bundleDeclaration = "new WeCMS\\AdminBundle\\WeCMSAdminBundle(),\n            ";
+        $bundleDeclaration .= "new FOS\UserBundle\FOSUserBundle(),\n            ";
         $bundleDeclaration .= "new WeCMS\\UserBundle\\WeCMSUserBundle(),";
         $content = file_get_contents($kernelFile);
     
@@ -44,23 +45,30 @@ class ScriptHandler extends SensioScriptHandler
             $fs->dumpFile($kernelFile, $updatedContent);
         }
         $prefix = ltrim($event->getIO()->ask("Please enter the prefix used to access the admin section e.g. 'admin': "),"/");
+        $username = $event->getIO()->askAndValidate("Please enter the username for the super admin account e.g. 'superadmin': ",function($response) {
+            if (!empty($response)) {
+                return $response;
+            } else {
+                throw new \RuntimeException("Please enter a valid username");
+            }
+        });
+        $password = $event->getIO()->askAndHideAnswer("Please enter the password for the super admin account e.g. 'password': ");
         self::patchAdminBundleConfiguration($appDir, $fs, $prefix);
     }
     
-    private static function patchAdminBundleConfiguration($appDir, Filesystem $fs, $prefix = "")
+    private static function patchAdminBundleConfiguration($appDir, Filesystem $fs, $prefix = "",$username,$password)
     {
         $routingFile = $appDir.'/config/routing.yml';
         $securityFile = $appDir.'/config/security.yml';
+        $configFile = $appDir.'/config/config.yml';
     
         $routingData = file_get_contents($routingFile).<<<EOF
 _we_admin:
     resource: "@WeCMSAdminBundle/Controller/"
-        type:     annotation
-      prefix:   /$prefix
-_we_users:
-    resource: "@WeCMSUserBundle/Controller/"
-        type:     annotation
-      prefix:   /$prefix
+    type: annotation
+    prefix: /$prefix
+fos_user_security:
+    resource: "@FOSUserBundle/Resources/config/routing/security.xml"
 EOF;
         $fs->dumpFile($routingFile, $routingData);
     
@@ -79,11 +87,15 @@ security:
     
     # http://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
     providers:
+        chain_provider:
+            chain:
+                providers: [in_memory, fos_userbundle]
+        fos_userbundle:
+            id: fos_user.user_provider.username
         in_memory:
             memory:
                 users:
-                    user:  { password: userpass, roles: [ 'ROLE_USER' ] }
-                    admin: { password: adminpass, roles: [ 'ROLE_ADMIN' ] }
+                    $username: { password: $password, roles: [ 'ROLE_SUPER_ADMIN' ] }
     
     # the main part of the security, where you can set up firewalls
     # for specific sections of your app
@@ -92,21 +104,18 @@ security:
         dev:
             pattern:  ^/(_(profiler|wdt)|css|images|js)/
             security: false
-        # the login page has to be accessible for everybody
-        admin_login:
-            pattern:  ^/$prefix/users/login$
-            security: false
-    
         # secures part of the application
         admin_area:
             pattern:    ^/$prefix/
             form_login:
-                check_path: _we_admin_security_check
-                login_path: _we_admin_login
-            logout:
-                path:   _we_admin_logout
-                target: _we_admin
-            #anonymous: ~
+                provider: fos_userbundle
+                csrf_provider: form.csrf_provider
+                login_path:     fos_user_security_login
+                use_forward:    false
+                check_path:     fos_user_security_check
+                failure_path:   null
+            logout: true
+            anonymous: true
             #http_basic:
             #    realm: "Secured Demo Area"
     
@@ -114,9 +123,23 @@ security:
     # of your application based on roles, ip, host or methods
     # http://symfony.com/doc/current/book/security.html#security-book-access-control-matching-options
     access_control:
+        - { path: ^/$prefix/, role: ROLE_ADMIN }
+        - { path: ^/$prefix/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         #- { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
 EOF;
     
         $fs->dumpFile($securityFile, $securityData);
+        
+        $configData = file_get_contents($configFile).<<<EOF
+#Userbundle Configuration
+fos_user:
+    db_driver: orm
+    firewall_name: admin_area
+    user_class: WeCMS\UserBundle\Entity\User
+    group:
+        group_class: WeCMS\UserBundle\Entity\Group
+EOF;
+        $fs->dumpFile($configFile, $configData);
+        
     }
 }
