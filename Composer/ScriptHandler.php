@@ -53,10 +53,10 @@ class ScriptHandler extends SensioScriptHandler
             }
         });
         $password = $event->getIO()->askAndHideAnswer("Please enter the password for the super admin account e.g. 'password': ");
-        self::patchAdminBundleConfiguration($event,$appDir, $fs, $prefix,$username,$password);
+        self::patchAdminBundleConfiguration($appDir, $fs, $prefix,$username,$password);
     }
     
-    private static function patchAdminBundleConfiguration($event,$appDir, Filesystem $fs, $prefix = "",$username,$password)
+    private static function patchAdminBundleConfiguration($appDir, Filesystem $fs, $prefix = "",$username,$password)
     {
         $routingFile = $appDir.'/config/routing.yml';
         $securityFile = $appDir.'/config/security.yml';
@@ -140,10 +140,26 @@ fos_user:
         group_class: WeCMS\UserBundle\Entity\Group
 EOF;
         $fs->dumpFile($configFile, $configData);
-        
+    }
+    
+    public static function generateDatabase(CommandEvent $event)
+    {
         $options = self::getOptions($event);
         $consoleDir = self::getConsoleDir($event, 'generate database schema');
-        static::executeCommand($event, $consoleDir, 'doctrine:schema:create', $options['process-timeout']);
+        
+        if (!$event->getIO()->askConfirmation('Create database? [N/y] ', false)) {
+            static::executeCommand($event, $consoleDir, 'doctrine:schema:create', $options['process-timeout']);
+        }
+        
+        self::updateDatabase($event);
+    }
+    
+    
+    public static function updateDatabase(CommandEvent $event)
+    {
+        $options = self::getOptions($event);
+        $consoleDir = self::getConsoleDir($event, 'update database schema');
         static::executeCommand($event, $consoleDir, 'doctrine:schema:update --force', $options['process-timeout']);
+        
     }
 }
