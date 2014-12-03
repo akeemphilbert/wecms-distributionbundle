@@ -53,7 +53,7 @@ class ScriptHandler extends SensioScriptHandler
             }
         });
         $password = $event->getIO()->askAndHideAnswer("Please enter the password for the super admin account e.g. 'password': ");
-        self::patchAdminBundleConfiguration($appDir, $fs, $prefix);
+        self::patchAdminBundleConfiguration($appDir, $fs, $prefix,$username,$password);
     }
     
     private static function patchAdminBundleConfiguration($appDir, Filesystem $fs, $prefix = "",$username,$password)
