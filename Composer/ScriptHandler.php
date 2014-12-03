@@ -53,10 +53,10 @@ class ScriptHandler extends SensioScriptHandler
             }
         });
         $password = $event->getIO()->askAndHideAnswer("Please enter the password for the super admin account e.g. 'password': ");
-        self::patchAdminBundleConfiguration($appDir, $fs, $prefix,$username,$password);
+        self::patchAdminBundleConfiguration($event,$appDir, $fs, $prefix,$username,$password);
     }
     
-    private static function patchAdminBundleConfiguration($appDir, Filesystem $fs, $prefix = "",$username,$password)
+    private static function patchAdminBundleConfiguration($event,$appDir, Filesystem $fs, $prefix = "",$username,$password)
     {
         $routingFile = $appDir.'/config/routing.yml';
         $securityFile = $appDir.'/config/security.yml';
