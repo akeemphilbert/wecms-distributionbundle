@@ -13,13 +13,9 @@
 
     "require": {
         "php": ">=5.3.3",
-        "symfony/framework-bundle": "~2.3",
-        "symfony/class-loader": "~2.2",
-        "symfony/form": "~2.2",
-        "symfony/process": "~2.2",
-        "symfony/validator": "~2.2",
-        "symfony/yaml": "~2.2",
-        "sensiolabs/security-checker": "~2.0"
+        "wepala/wecms-adminbundle": "@dev",
+        "wepala/wecms-userbundle": "@dev",
+        "sensio/distribution-bundle": "~3.0"
     },
     "autoload": {
         "psr-0": { "WeCMS\\DistributionBundle": "" }
