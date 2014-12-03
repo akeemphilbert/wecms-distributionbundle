@@ -124,8 +124,8 @@ security:
     # of your application based on roles, ip, host or methods
     # http://symfony.com/doc/current/book/security.html#security-book-access-control-matching-options
     access_control:
-        - { path: ^/$prefix/, role: ROLE_ADMIN }
         - { path: ^/$prefix/users/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/$prefix/, role: ROLE_ADMIN }
         #- { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
 EOF;
     
