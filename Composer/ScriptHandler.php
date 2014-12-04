@@ -4,7 +4,7 @@ use Sensio\Bundle\DistributionBundle\Composer\ScriptHandler as SensioScriptHandl
 use Composer\Script\CommandEvent;
 use Symfony\Component\Filesystem\Filesystem;
 
-require 'lib/password.php';
+require 'vendor/ircmaxell/password-compat/lib/password.php';
 
 class ScriptHandler extends SensioScriptHandler
 {
