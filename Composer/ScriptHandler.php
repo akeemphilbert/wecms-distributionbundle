@@ -1,9 +1,10 @@
 <?php
-
 namespace WeCMS\DistributionBundle\Composer;
 use Sensio\Bundle\DistributionBundle\Composer\ScriptHandler as SensioScriptHandler;
 use Composer\Script\CommandEvent;
 use Symfony\Component\Filesystem\Filesystem;
+
+require 'lib/password.php';
 
 class ScriptHandler extends SensioScriptHandler
 {
