@@ -109,7 +109,7 @@ security:
         admin_area:
             pattern:    ^/$prefix/
             form_login:
-                provider: fos_userbundle
+                provider: chain_provider
                 csrf_provider: form.csrf_provider
                 login_path:     fos_user_security_login
                 use_forward:    false
