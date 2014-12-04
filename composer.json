@@ -12,7 +12,8 @@
     ],
 
     "require": {
-        "php": ">=5.3.3",
+        "php": ">=5.4",
+        "ircmaxell/password-compat": "~1.0.3",
         "wepala/wecms-adminbundle": "@dev",
         "wepala/wecms-userbundle": "@dev",
         "sensio/distribution-bundle": "~3.0"

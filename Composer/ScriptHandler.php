@@ -61,6 +61,8 @@ class ScriptHandler extends SensioScriptHandler
         $routingFile = $appDir.'/config/routing.yml';
         $securityFile = $appDir.'/config/security.yml';
         $configFile = $appDir.'/config/config.yml';
+        
+        $encodedPassword = password_hash($password, PASSWORD_BCRYPT, array('cost' => 12));
     
         $routingData = file_get_contents($routingFile).<<<EOF
 _we_admin:
@@ -79,7 +81,9 @@ EOF;
 security:
     # http://symfony.com/doc/current/book/security.html#encoding-the-user-s-password
     encoders:
-        Symfony\Component\Security\Core\User\User: plaintext
+        Symfony\Component\Security\Core\User\User:
+            algorithm: bcrypt
+            cost: 12
     
     # http://symfony.com/doc/current/book/security.html#hierarchical-roles
     role_hierarchy:
@@ -96,7 +100,7 @@ security:
         in_memory:
             memory:
                 users:
-                    $username: { password: $password, roles: [ 'ROLE_SUPER_ADMIN' ] }
+                    $username: { password: $encodedPassword, roles: [ 'ROLE_SUPER_ADMIN' ] }
     
     # the main part of the security, where you can set up firewalls
     # for specific sections of your app
