@@ -34,6 +34,7 @@ class ScriptHandler extends SensioScriptHandler
         $kernelFile = $appDir.'/AppKernel.php';
         $ref = 'new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),';//TODO replace with custom profiler here
         $bundleDeclaration = "new WeCMS\\AdminBundle\\WeCMSAdminBundle(),\n            ";
+        $bundleDeclaration .= "new WeCMS\\AdminBundle\\WeCMSSiteBundle(),\n            ";
         $bundleDeclaration .= "new FOS\UserBundle\FOSUserBundle(),\n            ";
         $bundleDeclaration .= "new WeCMS\\UserBundle\\WeCMSUserBundle(),";
         $content = file_get_contents($kernelFile);
@@ -153,7 +154,8 @@ EOF;
         $options = self::getOptions($event);
         $consoleDir = self::getConsoleDir($event, 'generate database schema');
         
-        if (!$event->getIO()->askConfirmation('Create database? [N/y] ', false)) {
+        if ($event->getIO()->askConfirmation('Create database? [N/y] ', false)) {
+            static::executeCommand($event, $consoleDir, 'doctrine:schema:create', $options['process-timeout']);
             static::executeCommand($event, $consoleDir, 'doctrine:schema:create', $options['process-timeout']);
         }
         
