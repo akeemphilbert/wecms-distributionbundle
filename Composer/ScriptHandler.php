@@ -145,7 +145,7 @@ EOF;
         
         //add imports for installed bundles
         $imports = <<<EOF
-        - { resource: "@WeCMSSiteBundle/Resources/config/config.yml" }
+    - { resource: "@WeCMSSiteBundle/Resources/config/config.yml" }
 EOF;
         $ref = '- { resource: parameters.yml }';
         $configData = str_replace($ref, $ref."\n".$imports, $configData);
