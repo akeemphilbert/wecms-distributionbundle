@@ -79,6 +79,9 @@ security:
         Symfony\Component\Security\Core\User\User:
             algorithm: bcrypt
             cost: 12
+        FOS\UserBundle\Model\UserInterface:
+            algorithm: bcrypt
+            cost: 12
     
     # http://symfony.com/doc/current/book/security.html#hierarchical-roles
     role_hierarchy:
@@ -139,6 +142,13 @@ fos_user:
     group:
         group_class: WeCMS\UserBundle\Entity\Group
 EOF;
+        
+        //add imports for installed bundles
+        $imports = <<<EOF
+        - { resource: "@WeCMSSiteBundle/Resources/config/config.yml" }
+EOF;
+        $ref = 'imports:';
+        $imports = str_replace($ref, $imports."\n".$ref, $configData);
         $fs->dumpFile($configFile, $configData);
     }
     
