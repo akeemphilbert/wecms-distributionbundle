@@ -14,9 +14,9 @@
     "require": {
         "php": ">=5.4",
         "ircmaxell/password-compat": "~1.0.3",
-        "wepala/wecms-sitebundle": "@dev",
-        "wepala/wecms-adminbundle": "@dev",
-        "wepala/wecms-userbundle": "@dev",
+        "wepala/wecms-sitebundle": "1.0.x-dev",
+        "wepala/wecms-adminbundle": "1.0.x-dev",
+        "wepala/wecms-userbundle": "1.0.x-dev",
         "sensio/distribution-bundle": "~3.0"
     },
     "autoload": {
