@@ -147,8 +147,8 @@ EOF;
         $imports = <<<EOF
         - { resource: "@WeCMSSiteBundle/Resources/config/config.yml" }
 EOF;
-        $ref = 'imports:';
-        $imports = str_replace($ref, $imports."\n".$ref, $configData);
+        $ref = '- { resource: parameters.yml }';
+        $configData = str_replace($ref, $ref."\n".$imports, $configData);
         $fs->dumpFile($configFile, $configData);
     }
     
