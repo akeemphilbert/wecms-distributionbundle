@@ -13,13 +13,6 @@ class ScriptHandler extends SensioScriptHandler
         $rootDir = getcwd();
         $options = self::getOptions($event);
     
-        if (
-                !file_exists($rootDir.'/vendor/wepala/wecms-adminbundle/WeCMS/AdminBundle') ||
-                !file_exists($rootDir.'/vendor/wepala/wecms-userbundle/WeCMS/UserBundle')
-        ) {
-            return;
-        }
-    
         if (!getenv('WECMS_FORCE_ADMIN')) {
             if (!$event->getIO()->askConfirmation('Would you like to install the Admin bundle? [Y/n] ', true)) {
                 return;
