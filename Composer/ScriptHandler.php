@@ -64,7 +64,7 @@ class ScriptHandler extends SensioScriptHandler
     
         $routingData = file_get_contents($routingFile).<<<EOF
 _wecms_admin:
-    resource: "@WeCMSAdminBundle/Resources/config/cms.yml"
+    resource: "@WeCMSAdminBundle/Resources/config/routing/cms.yml"
     prefix: /$prefix
 _wecms_site:
     resource: "@WeCMSSiteBundle/Resources/config/routing/site.yml"
