@@ -26,9 +26,9 @@ class ScriptHandler extends SensioScriptHandler
     
         $kernelFile = $appDir.'/AppKernel.php';
         $ref = 'new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),';//TODO replace with custom profiler here
-        $bundleDeclaration = "new Doctrine\\Bundle\\PHPCRBundle\\DoctrinePHPCRBundle(),\n            ";
-        $bundleDeclaration = "new Doctrine\\Bundle\\DoctrineBundle\\DoctrineBundle(),\n            ";
-        $bundleDeclaration = "new WeCMS\\AdminBundle\\WeCMSAdminBundle(),\n            ";
+        $bundleDeclaration .= "new Doctrine\\Bundle\\PHPCRBundle\\DoctrinePHPCRBundle(),\n            ";
+        $bundleDeclaration .= "new Doctrine\\Bundle\\DoctrineBundle\\DoctrineBundle(),\n            ";
+        $bundleDeclaration .= "new WeCMS\\AdminBundle\\WeCMSAdminBundle(),\n            ";
         $bundleDeclaration .= "new WeCMS\\SiteBundle\\WeCMSSiteBundle(),\n            ";
         $bundleDeclaration .= "new FOS\\UserBundle\\FOSUserBundle(),\n            ";
         $bundleDeclaration .= "new Symfony\\Cmf\Bundle\\RoutingBundle\\CmfRoutingBundle(),\n            ";
