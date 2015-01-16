@@ -167,17 +167,6 @@ fos_user:
     user_class: WeCMS\UserBundle\Entity\User
     group:
         group_class: WeCMS\UserBundle\Entity\Group
-#Assetic configuration
-assetic:
-    debug:                "%kernel.debug%"
-    use_controller:
-        enabled:              "%kernel.debug%"
-        profiler:             false
-    read_from:            "%kernel.root_dir%/../web"
-    write_to:             "%assetic.read_from%"
-    bundles:
-        - WeCMSAdminBundle
-        - WeCMSSiteBundle
 EOF;
         
         //add imports for installed bundles
@@ -187,6 +176,13 @@ EOF;
 EOF;
         $ref = '- { resource: parameters.yml }';
         $configData = str_replace($ref, $ref."\n".$imports, $configData);
+        $asseticRef = 'bundles:        [ ]';
+        $assetBundles = <<<EOF
+    bundles:
+        - WeCMSAdminBundle
+        - WeCMSSiteBundle
+EOF;
+        $configData = str_replace($asseticRef, $asseticRef."\n".$assetBundles, $configData);
         $fs->dumpFile($configFile, $configData);
     }
     
