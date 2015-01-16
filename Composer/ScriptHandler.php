@@ -30,6 +30,7 @@ class ScriptHandler extends SensioScriptHandler
         $bundleDeclaration .= "new WeCMS\\SiteBundle\\WeCMSSiteBundle(),\n            ";
         $bundleDeclaration .= "new FOS\\UserBundle\\FOSUserBundle(),\n            ";
         $bundleDeclaration .= "new Symfony\\Cmf\Bundle\\RoutingBundle\\CmfRoutingBundle(),\n            ";
+        $bundleDeclaration .= "new Knp\\Bundle\\MenuBundle\\KnpMenuBundle(),\n            ";
         $bundleDeclaration .= "new WeCMS\\UserBundle\\WeCMSUserBundle(),";
         $content = file_get_contents($kernelFile);
     
@@ -61,10 +62,15 @@ class ScriptHandler extends SensioScriptHandler
         $encodedPassword = password_hash($password, PASSWORD_BCRYPT, array('cost' => 12));
     
         $routingData = file_get_contents($routingFile).<<<EOF
-_we_admin:
-    resource: "@WeCMSAdminBundle/Controller/"
-    type: annotation
+_wecms_admin:
+    resource: "@WeCMSAdminBundle/Resources/config/cms.yml"
     prefix: /$prefix
+_wecms_site:
+    resource: "@WeCMSSiteBundle/Resources/config/routing/site.yml"
+    prefix: /cms/site
+_wecms_content:
+    resource: "@WeCMSSiteBundle/Resources/config/routing/content.yml"
+    prefix: /cms/content
 fos_user_security:
     resource: "@FOSUserBundle/Resources/config/routing/security.xml"
     prefix: /$prefix/users
@@ -135,6 +141,24 @@ EOF;
         $fs->dumpFile($securityFile, $securityData);
         
         $configData = file_get_contents($configFile).<<<EOF
+doctrine_phpcr:
+    session:
+        backend:
+            type: doctrinedbal
+            # requires DoctrineCacheBundle
+            # caches:
+            #     meta: doctrine_cache.providers.phpcr_meta
+            #     nodes: doctrine_cache.providers.phpcr_nodes
+            # enable logging
+            logging: true
+            # enable profiling in the debug toolbar.
+            profiling: true
+        workspace: default
+        username: $username
+        password: $encodedPassword
+    odm:
+        auto_mapping: true
+        auto_generate_proxy_classes: "%kernel.debug%"
 #Userbundle Configuration
 fos_user:
     db_driver: orm
@@ -146,6 +170,7 @@ EOF;
         
         //add imports for installed bundles
         $imports = <<<EOF
+    - { resource: "@WeCMSAdminBundle/Resources/config/config.yml" }
     - { resource: "@WeCMSSiteBundle/Resources/config/config.yml" }
 EOF;
         $ref = '- { resource: parameters.yml }';
@@ -159,8 +184,9 @@ EOF;
         $consoleDir = self::getConsoleDir($event, 'generate database schema');
         
         if ($event->getIO()->askConfirmation('Create database? [N/y] ', false)) {
+            static::executeCommand($event, $consoleDir, 'doctrine:database:create', $options['process-timeout']);
             static::executeCommand($event, $consoleDir, 'doctrine:schema:create', $options['process-timeout']);
-            static::executeCommand($event, $consoleDir, 'doctrine:schema:create', $options['process-timeout']);
+            static::executeCommand($event, $consoleDir, 'doctrine:phpcr:repository:init', $options['process-timeout']);
         }
         
         self::updateDatabase($event);
