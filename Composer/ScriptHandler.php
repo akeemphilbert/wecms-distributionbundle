@@ -182,7 +182,7 @@ EOF;
         - WeCMSAdminBundle
         - WeCMSSiteBundle
 EOF;
-        $configData = str_replace($asseticRef, $asseticRef."\n".$assetBundles, $configData);
+        $configData = str_replace($asseticRef, $assetBundles, $configData);
         $fs->dumpFile($configFile, $configData);
     }
     
