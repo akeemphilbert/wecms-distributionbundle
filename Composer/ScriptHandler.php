@@ -178,7 +178,7 @@ EOF;
         $configData = str_replace($ref, $ref."\n".$imports, $configData);
         $asseticRef = 'bundles:        [ ]';
         $assetBundles = <<<EOF
-    bundles:
+bundles:
         - WeCMSAdminBundle
         - WeCMSSiteBundle
 EOF;
