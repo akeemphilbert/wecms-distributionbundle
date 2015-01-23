@@ -17,7 +17,8 @@
         "wepala/wecms-sitebundle": "1.0.x-dev",
         "wepala/wecms-adminbundle": "1.0.x-dev",
         "wepala/wecms-userbundle": "1.0.x-dev",
-        "sensio/distribution-bundle": "~3.0"
+        "wepala/wecms-userbundle": "1.0.x-dev",
+        "sp/bower-bundle": "0.11"
     },
     "autoload": {
         "psr-0": { "WeCMS\\DistributionBundle": "" }

@@ -30,7 +30,8 @@ class ScriptHandler extends SensioScriptHandler
         $bundleDeclaration .= "new WeCMS\\AdminBundle\\WeCMSAdminBundle(),\n            ";
         $bundleDeclaration .= "new WeCMS\\SiteBundle\\WeCMSSiteBundle(),\n            ";
         $bundleDeclaration .= "new FOS\\UserBundle\\FOSUserBundle(),\n            ";
-        $bundleDeclaration .= "new Symfony\\Cmf\Bundle\\RoutingBundle\\CmfRoutingBundle(),\n            ";
+        $bundleDeclaration .= "new Symfony\\Cmf\\Bundle\\RoutingBundle\\CmfRoutingBundle(),\n            ";
+        $bundleDeclaration .= "new new Sp\\BowerBundle\\SpBowerBundle(),,\n            ";
         $bundleDeclaration .= "new Knp\\Bundle\\MenuBundle\\KnpMenuBundle(),\n            ";
         $bundleDeclaration .= "new WeCMS\\UserBundle\\WeCMSUserBundle(),";
         $content = file_get_contents($kernelFile);
@@ -68,13 +69,16 @@ _wecms_admin:
     prefix: /$prefix
 _wecms_site:
     resource: "@WeCMSSiteBundle/Resources/config/routing/site.yml"
-    prefix: /cms/site
+    prefix: /$prefix/site
 _wecms_content:
     resource: "@WeCMSSiteBundle/Resources/config/routing/content.yml"
-    prefix: /cms/content
+    prefix: /$prefix/content
 fos_user_security:
     resource: "@FOSUserBundle/Resources/config/routing/security.xml"
     prefix: /$prefix/users
+_wecms_site_public:
+    resource: "@WeCMSSiteBundle/Resources/config/routing/public.yml"
+    prefix: /
 EOF;
         $fs->dumpFile($routingFile, $routingData);
     
