@@ -31,7 +31,6 @@ class ScriptHandler extends SensioScriptHandler
         $bundleDeclaration .= "new WeCMS\\SiteBundle\\WeCMSSiteBundle(),\n            ";
         $bundleDeclaration .= "new FOS\\UserBundle\\FOSUserBundle(),\n            ";
         $bundleDeclaration .= "new Symfony\\Cmf\\Bundle\\RoutingBundle\\CmfRoutingBundle(),\n            ";
-        $bundleDeclaration .= "new new Sp\\BowerBundle\\SpBowerBundle(),,\n            ";
         $bundleDeclaration .= "new Knp\\Bundle\\MenuBundle\\KnpMenuBundle(),\n            ";
         $bundleDeclaration .= "new WeCMS\\UserBundle\\WeCMSUserBundle(),";
         $content = file_get_contents($kernelFile);
