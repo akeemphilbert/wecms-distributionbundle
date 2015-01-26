@@ -144,50 +144,6 @@ security:
 EOF;
     
         $fs->dumpFile($securityFile, $securityData);
-        
-        $configData = file_get_contents($configFile).<<<EOF
-doctrine_phpcr:
-    session:
-        backend:
-            type: doctrinedbal
-            # requires DoctrineCacheBundle
-            # caches:
-            #     meta: doctrine_cache.providers.phpcr_meta
-            #     nodes: doctrine_cache.providers.phpcr_nodes
-            # enable logging
-            logging: true
-            # enable profiling in the debug toolbar.
-            profiling: true
-        workspace: default
-        username: $username
-        password: $encodedPassword
-    odm:
-        auto_mapping: true
-        auto_generate_proxy_classes: "%kernel.debug%"
-#Userbundle Configuration
-fos_user:
-    db_driver: orm
-    firewall_name: admin_area
-    user_class: WeCMS\UserBundle\Entity\User
-    group:
-        group_class: WeCMS\UserBundle\Entity\Group
-EOF;
-        
-        //add imports for installed bundles
-        $imports = <<<EOF
-    - { resource: "@WeCMSAdminBundle/Resources/config/config.yml" }
-    - { resource: "@WeCMSSiteBundle/Resources/config/config.yml" }
-EOF;
-        $ref = '- { resource: parameters.yml }';
-        $configData = str_replace($ref, $ref."\n".$imports, $configData);
-        $asseticRef = 'bundles:        [ ]';
-        $assetBundles = <<<EOF
-bundles:
-        - WeCMSAdminBundle
-        - WeCMSSiteBundle
-EOF;
-        $configData = str_replace($asseticRef, $assetBundles, $configData);
-        $fs->dumpFile($configFile, $configData);
     }
     
     public static function generateDatabase(CommandEvent $event)
